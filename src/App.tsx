@@ -1,12 +1,9 @@
 import React from 'react';
-import './App.scss';
+import { UserListPage } from './pages/users-list-page/users-list-page';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>Hellor</h1>
-      <h3>no</h3>
-    </div>
+    <UserListPage></UserListPage>
   );
 }
 

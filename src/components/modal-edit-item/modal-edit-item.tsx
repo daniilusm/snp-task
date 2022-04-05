@@ -14,15 +14,17 @@ import {
 	DialogTitle,
 	TextField
 } from "@mui/material";
-import { ErrorMessage } from "./style";
+import { ErrorMessage } from "../modal-form/style";
 
 type ModalFormProps = {
+	item: IUserData
 	open: boolean
 	handleClose(): void
-	addNewUser(data: IUserData): void
+	editUserData(data: IUserData): void
+	deleteItemInTable(id: number): void
 }
 
-export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewUser }) => {
+export const ModalEditItem: React.FC<ModalFormProps> = ({ item, open, handleClose, editUserData, deleteItemInTable }) => {
 
 	const schema = yup.object({
 		fullName: yup.string().min(4, 'The number of characters must be at least 4').required('Full name is a required field'),
@@ -31,14 +33,20 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 	}).required();
 
 	const { register, formState: { errors, isDirty, isValid }, reset, handleSubmit } = useForm<IUserData>({
-		resolver: yupResolver(schema), mode: 'onChange'
+		resolver: yupResolver(schema), mode: 'onChange',
+		defaultValues: {
+			fullName: item.fullName,
+			email: item.email,
+			userName: item.userName,
+			id: item.id
+		}
 	});
 	const onSubmit: SubmitHandler<IUserData> = (data: IUserData) => {
-		data.id = Date.now();
-		addNewUser(data);
-		console.log(data)
-		reset();
+		editUserData(data);
 	};
+	const deleteItem = () => {
+		deleteItemInTable(item.id)
+	}
 
 	return (
 		<Dialog open={open} onClose={handleClose}>
@@ -81,8 +89,8 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 					<ErrorMessage>{errors.userName?.message}</ErrorMessage>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button type='submit' disabled={!isDirty || !isValid} onClick={handleClose}>Submit</Button>
+					<Button onClick={deleteItem}>Delete</Button>
+					<Button type='submit' disabled={!isDirty || !isValid} onClick={handleClose}>Save</Button>
 				</DialogActions>
 			</form>
 		</Dialog >

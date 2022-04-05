@@ -30,7 +30,14 @@ const noItems: IUserData = {
 export const UserListPage: React.FC = () => {
 
 	const [tableItem, setTableItem] = useState<IUserData[]>([]);
+
 	const [openModal, setOpenModal] = useState<boolean>(false);
+	const handleClickOpen = () => {
+		setOpenModal(true);
+	};
+	const handleClose = () => {
+		setOpenModal(false);
+	};
 
 	useEffect(() => {
 		const saved = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
@@ -45,18 +52,22 @@ export const UserListPage: React.FC = () => {
 		setTableItem(prev => [data, ...prev])
 	}
 
-	const handleClickOpen = () => {
-		setOpenModal(true);
-	};
-
-	const handleClose = () => {
-		setOpenModal(false);
-	};
-
 	function isNoItems() {
 		if (tableItem.length === 0) {
-			return <UserItem item={noItems}></UserItem>
+			return <UserItem item={noItems} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 		}
+	}
+
+	function changeItemInTable(user: IUserData) {
+		let data = tableItem
+		const userIndex = data.findIndex(item => item.id === user.id)
+		data[userIndex] = user;
+		setTableItem(data);
+	}
+
+	function deleteItemInTable(id: number) {
+		const newDataTable = tableItem.filter(item => item.id !== id)
+		setTableItem(newDataTable)
 	}
 
 	return (
@@ -79,7 +90,7 @@ export const UserListPage: React.FC = () => {
 						</TableHead>
 						<TableBody>
 							{isNoItems() || tableItem.map((item) => (
-								<UserItem item={item} key={item.id}></UserItem>
+								<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 							))}
 						</TableBody>
 					</Table>

@@ -7,33 +7,48 @@ import { IUserData } from '../../interfaces';
 import { StyledTableCell, StyledTableRow } from '../../pages/users-list-page/styleMUI';
 import { FullName } from './style';
 import ModalUser from '../modal-user';
+import ModalEditItem from '../modal-edit-item';
 
 type UserItemProps = {
 	item: IUserData
+	changeDataTable(data: IUserData): void
+	deleteItemInTable(id: number): void
 }
 
-export const UserItem: React.FC<UserItemProps> = ({ item }) => {
+export const UserItem: React.FC<UserItemProps> = ({ item, changeDataTable, deleteItemInTable }) => {
 
-	const [open, setOpen] = useState<boolean>(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
+	const [itemInfo, setItemInfo] = useState<IUserData>(item)
 
+	const [openInfo, setOpenInfo] = useState<boolean>(false);
+	const openInfoModal = () => setOpenInfo(true);
+	const closeInfoModal = () => setOpenInfo(false);
+
+	const [openEdit, setOpenEdit] = useState<boolean>(false);
+	const openEditModal = () => setOpenEdit(true);
+	const closeEditModal = () => setOpenEdit(false);
+
+	const editUserData = (data: IUserData) => {
+		setItemInfo(data);
+		changeDataTable(data);
+	}
 
 	return (
 		<>
 			<StyledTableRow>
 				<StyledTableCell component="th" scope="row">
 					<FullName>
-						<PersonIcon color='primary' /> {item.fullName}
+						<PersonIcon color='primary' /> {itemInfo.fullName}
 					</FullName>
 				</StyledTableCell>
-				<StyledTableCell align="center">{item.email}</StyledTableCell>
-				<StyledTableCell align="center">{item.userName}</StyledTableCell>
+				<StyledTableCell align="center">{itemInfo.email}</StyledTableCell>
+				<StyledTableCell align="center">{itemInfo.userName}</StyledTableCell>
 				<StyledTableCell align="center">
-					<Button onClick={handleOpen}>open</Button>
+					<Button onClick={openInfoModal}>open</Button>
+					<Button onClick={openEditModal}>edit</Button>
 				</StyledTableCell>
 			</StyledTableRow>
-			<ModalUser open={open} handleClose={handleClose} item={item}></ModalUser>
+			<ModalUser open={openInfo} handleClose={closeInfoModal} item={itemInfo}></ModalUser>
+			<ModalEditItem open={openEdit} handleClose={closeEditModal} item={itemInfo} editUserData={editUserData} deleteItemInTable={deleteItemInTable}></ModalEditItem>
 		</>
 	)
 }

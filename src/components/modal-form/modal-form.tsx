@@ -30,13 +30,13 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 		userName: yup.string().min(4, 'The number of characters must be at least 4').required('User name is a required field'),
 	}).required();
 
-	const { register, formState: { errors }, reset, handleSubmit } = useForm<IUserData>({
-		resolver: yupResolver(schema)
+	const { register, formState: { errors, isDirty, isValid }, reset, handleSubmit } = useForm<IUserData>({
+		resolver: yupResolver(schema), mode: 'onChange'
 	});
-	const onSubmit: SubmitHandler<IUserData> = (data: IUserData, el: any) => {
+	const onSubmit: SubmitHandler<IUserData> = (data: IUserData) => {
 		data.id = Date.now();
 		addNewUser(data);
-		el.target.reset();
+		reset();
 	};
 
 	return (
@@ -81,7 +81,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
-					<Button type='submit'>Submit</Button>
+					<Button type='submit' disabled={!isDirty || !isValid} onClick={handleClose}>Submit</Button>
 				</DialogActions>
 			</form>
 		</Dialog >

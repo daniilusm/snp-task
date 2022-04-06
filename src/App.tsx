@@ -1,10 +1,10 @@
 import React from 'react';
 
-import UserListPage from './pages/users-list-page';
+import { Routers } from './pages/Routes';
 
 const App: React.FC = () => {
   return (
-    <UserListPage></UserListPage>
+    <Routers />
   );
 }
 

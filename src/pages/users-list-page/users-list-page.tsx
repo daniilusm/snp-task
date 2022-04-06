@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
 import {
 	Button,
 	Typography,
@@ -9,6 +10,9 @@ import {
 	TableHead,
 	TableRow,
 	TableBody,
+	FormControl,
+	InputLabel,
+	Input,
 } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
@@ -16,6 +20,9 @@ import UserItem from '../../components/user-item';
 import ModalForm from '../../components/modal-form';
 
 import { IUserData } from '../../interfaces';
+
+// import { usersSetNewItem } from '../../store/actions/usersActions';
+// import { selectUsers } from '../../store/selectors';
 
 import { StyledTableCell } from './styleMUI';
 import { Heading, Line } from './style';
@@ -29,7 +36,18 @@ const noItems: IUserData = {
 
 export const UserListPage: React.FC = () => {
 
+	// const users: IUserData[] = useSelector((state: any) => state.users.users);
+
+	// const dispatch = useDispatch();
+
 	const [tableItem, setTableItem] = useState<IUserData[]>([]);
+
+	const [value, setValue] = useState<string>('');
+	const filterItems = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		const inputValue = event.target.value;
+		setValue(inputValue);
+	}
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
 	const handleClickOpen = () => {
@@ -41,33 +59,46 @@ export const UserListPage: React.FC = () => {
 
 	useEffect(() => {
 		const saved = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
+		// const setLSUser = dispatch(usersSetNewItem(saved));
 		setTableItem(saved)
 	}, [])
 
 	useEffect(() => {
-		localStorage.setItem('users', JSON.stringify(tableItem))
+		localStorage.setItem('users', JSON.stringify(tableItem));
+		// const setNewUser = dispatch(usersSetNewItem(tableItem));
 	}, [tableItem])
 
 	function addNewUser(data: IUserData) {
 		setTableItem(prev => [data, ...prev])
 	}
 
-	function isNoItems() {
+	function tableItemsContent() {
 		if (tableItem.length === 0) {
 			return <UserItem item={noItems} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+		}
+		if (value.length === 0) {
+			return tableItem.map((item) => (
+				<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+			))
+		}
+		if (value.length !== 0) {
+			let filteredUsers = tableItem.filter(item => item.fullName.includes(value));
+			return filteredUsers.map((item) => (
+				<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+			))
 		}
 	}
 
 	function changeItemInTable(user: IUserData) {
-		let data = tableItem
-		const userIndex = data.findIndex(item => item.id === user.id)
+		let data = tableItem;
+		const userIndex = data.findIndex(item => item.id === user.id);
 		data[userIndex] = user;
 		setTableItem(data);
 	}
 
 	function deleteItemInTable(id: number) {
-		const newDataTable = tableItem.filter(item => item.id !== id)
-		setTableItem(newDataTable)
+		const newDataTable = tableItem.filter(item => item.id !== id);
+		setTableItem(newDataTable);
 	}
 
 	return (
@@ -78,6 +109,14 @@ export const UserListPage: React.FC = () => {
 			</Heading>
 			<Line />
 			<Container>
+				<FormControl fullWidth sx={{ m: 1 }} variant="standard">
+					<InputLabel htmlFor="filter-item">Search user by name</InputLabel>
+					<Input
+						id="filter-item"
+						value={value}
+						onChange={filterItems}
+					/>
+				</FormControl>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 700 }} aria-label="customized table">
 						<TableHead>
@@ -89,9 +128,7 @@ export const UserListPage: React.FC = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{isNoItems() || tableItem.map((item) => (
-								<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
-							))}
+							{tableItemsContent()}
 						</TableBody>
 					</Table>
 				</TableContainer>

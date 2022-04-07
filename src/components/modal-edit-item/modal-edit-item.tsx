@@ -89,7 +89,7 @@ export const ModalEditItem: React.FC<ModalFormProps> = ({ item, open, handleClos
 					<ErrorMessage>{errors.userName?.message}</ErrorMessage>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={deleteItem}>Delete</Button>
+					<Button onClick={deleteItem} color='error'>Delete</Button>
 					<Button type='submit' disabled={!isDirty || !isValid} onClick={handleClose}>Save</Button>
 				</DialogActions>
 			</form>

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
 	Button,
 	Typography,
@@ -21,7 +22,7 @@ import ModalForm from '../../components/modal-form';
 
 import { IUserData } from '../../interfaces';
 
-// import { usersSetNewItem } from '../../store/actions/usersActions';
+import { usersSetNewItem } from '../../store/actions/usersActions';
 // import { selectUsers } from '../../store/selectors';
 
 import { StyledTableCell } from './styleMUI';
@@ -36,17 +37,26 @@ const noItems: IUserData = {
 
 export const UserListPage: React.FC = () => {
 
-	// const users: IUserData[] = useSelector((state: any) => state.users.users);
+	const users: IUserData[] = useSelector((state: any) => state.users.users);
 
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
 	const [tableItem, setTableItem] = useState<IUserData[]>([]);
+
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [value, setValue] = useState<string>('');
 	const filterItems = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		const inputValue = event.target.value;
 		setValue(inputValue);
+		const searchParamsValue = `?search=${inputValue}`;
+		if (inputValue.length !== 0) {
+			setSearchParams(searchParamsValue);
+		}
+		if (inputValue.length === 0) {
+			setSearchParams('');
+		}
 	}
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
@@ -59,13 +69,13 @@ export const UserListPage: React.FC = () => {
 
 	useEffect(() => {
 		const saved = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
-		// const setLSUser = dispatch(usersSetNewItem(saved));
+		const setLSUser = dispatch(usersSetNewItem(saved));
 		setTableItem(saved)
 	}, [])
 
 	useEffect(() => {
 		localStorage.setItem('users', JSON.stringify(tableItem));
-		// const setNewUser = dispatch(usersSetNewItem(tableItem));
+		const setNewUser = dispatch(usersSetNewItem(tableItem));
 	}, [tableItem])
 
 	function addNewUser(data: IUserData) {
@@ -74,17 +84,17 @@ export const UserListPage: React.FC = () => {
 
 	function tableItemsContent() {
 		if (tableItem.length === 0) {
-			return <UserItem item={noItems} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+			return <UserItem item={noItems} index={1} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 		}
 		if (value.length === 0) {
-			return tableItem.map((item) => (
-				<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+			return tableItem.map((item, index) => (
+				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 			))
 		}
 		if (value.length !== 0) {
 			let filteredUsers = tableItem.filter(item => item.fullName.includes(value));
-			return filteredUsers.map((item) => (
-				<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+			return filteredUsers.map((item, index) => (
+				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 			))
 		}
 	}

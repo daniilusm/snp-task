@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
-import PersonIcon from '@mui/icons-material/Person';
-import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-import { IUserData } from '../../interfaces';
-
-import { StyledTableCell, StyledTableRow } from '../../pages/users-list-page/styleMUI';
-import { FullName } from './style';
 import ModalUser from '../modal-user';
 import ModalEditItem from '../modal-edit-item';
 
+import { IUserData } from '../../interfaces';
+
+import PersonIcon from '@mui/icons-material/Person';
+import InfoIcon from '@mui/icons-material/Info';
+import EditIcon from '@mui/icons-material/Edit';
+import { Button } from '@mui/material';
+
+import { StyledTableCell, StyledTableRow } from '../../pages/users-list-page/styleMUI';
+import { FullName } from './style';
+
 type UserItemProps = {
 	item: IUserData
+	index: number
 	changeDataTable(data: IUserData): void
 	deleteItemInTable(id: number): void
 }
 
-export const UserItem: React.FC<UserItemProps> = ({ item, changeDataTable, deleteItemInTable }) => {
+export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable, deleteItemInTable }) => {
 
 	const [itemInfo, setItemInfo] = useState<IUserData>(item)
 
@@ -43,8 +49,9 @@ export const UserItem: React.FC<UserItemProps> = ({ item, changeDataTable, delet
 				<StyledTableCell align="center">{itemInfo.email}</StyledTableCell>
 				<StyledTableCell align="center">{itemInfo.userName}</StyledTableCell>
 				<StyledTableCell align="center">
-					<Button onClick={openInfoModal}>open</Button>
-					<Button onClick={openEditModal}>edit</Button>
+					<Button component={Link} to={`/items/${index + 1}`}>open</Button>
+					<Button onClick={openInfoModal}><InfoIcon color='primary' /></Button>
+					<Button onClick={openEditModal}><EditIcon color='primary' /></Button>
 				</StyledTableCell>
 			</StyledTableRow>
 			<ModalUser open={openInfo} handleClose={closeInfoModal} item={itemInfo}></ModalUser>

@@ -1,18 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
-// import store from './store';
+import store from './store';
 
 const app = (
   <BrowserRouter>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <Provider store={store}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </Provider>
   </BrowserRouter>
 );
 

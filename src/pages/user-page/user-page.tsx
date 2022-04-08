@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { IUserData } from '../../interfaces';
 
-import { Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 import { Content, Card } from './style';

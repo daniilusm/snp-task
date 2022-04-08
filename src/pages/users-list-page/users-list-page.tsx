@@ -11,9 +11,7 @@ import {
 	TableHead,
 	TableRow,
 	TableBody,
-	FormControl,
-	InputLabel,
-	Input,
+	TextField,
 } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
@@ -22,7 +20,7 @@ import ModalForm from '../../components/modal-form';
 
 import { IUserData } from '../../interfaces';
 
-import { usersSetNewItem } from '../../store/actions/usersActions';
+import usersSetNewItem from '../../store/actions';
 // import { selectUsers } from '../../store/selectors';
 
 import { StyledTableCell } from './styleMUI';
@@ -45,16 +43,18 @@ export const UserListPage: React.FC = () => {
 
 	const [searchParams, setSearchParams] = useSearchParams();
 
+	const searchValue: string | null = searchParams.get("search");
+
 	const [value, setValue] = useState<string>('');
 	const filterItems = (event: React.ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
-		const inputValue = event.target.value;
+		const inputValue: string = event.target.value;
 		setValue(inputValue);
-		const searchParamsValue = `?search=${inputValue}`;
-		if (inputValue.length !== 0) {
+		const searchParamsValue: string = `?search=${inputValue}`;
+		if (inputValue) {
 			setSearchParams(searchParamsValue);
 		}
-		if (inputValue.length === 0) {
+		if (!inputValue) {
 			setSearchParams('');
 		}
 	}
@@ -68,7 +68,7 @@ export const UserListPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		const saved = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
+		const saved: IUserData[] = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
 		const setLSUser = dispatch(usersSetNewItem(saved));
 		setTableItem(saved)
 	}, [])
@@ -83,15 +83,15 @@ export const UserListPage: React.FC = () => {
 	}
 
 	function tableItemsContent() {
-		if (tableItem.length === 0) {
+		if (!tableItem) {
 			return <UserItem item={noItems} index={1} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 		}
-		if (value.length === 0) {
+		if (!value) {
 			return tableItem.map((item, index) => (
 				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 			))
 		}
-		if (value.length !== 0) {
+		if (value) {
 			let filteredUsers = tableItem.filter(item => item.fullName.includes(value));
 			return filteredUsers.map((item, index) => (
 				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
@@ -100,14 +100,14 @@ export const UserListPage: React.FC = () => {
 	}
 
 	function changeItemInTable(user: IUserData) {
-		let data = tableItem;
-		const userIndex = data.findIndex(item => item.id === user.id);
+		let data: IUserData[] = tableItem;
+		const userIndex: number = data.findIndex(item => item.id === user.id);
 		data[userIndex] = user;
 		setTableItem(data);
 	}
 
 	function deleteItemInTable(id: number) {
-		const newDataTable = tableItem.filter(item => item.id !== id);
+		const newDataTable: IUserData[] = tableItem.filter(item => item.id !== id);
 		setTableItem(newDataTable);
 	}
 
@@ -119,14 +119,16 @@ export const UserListPage: React.FC = () => {
 			</Heading>
 			<Line />
 			<Container>
-				<FormControl fullWidth sx={{ m: 1 }} variant="standard">
-					<InputLabel htmlFor="filter-item">Search user by name</InputLabel>
-					<Input
-						id="filter-item"
-						value={value}
-						onChange={filterItems}
-					/>
-				</FormControl>
+				<TextField
+					defaultValue={searchValue}
+					id="filter-item"
+					value={value}
+					onChange={filterItems}
+					label="Search user"
+					variant="standard"
+					margin='normal'
+					fullWidth
+				/>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 700 }} aria-label="customized table">
 						<TableHead>

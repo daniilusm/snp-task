@@ -2,5 +2,10 @@ export interface IUserData {
 	fullName: string
 	email: string,
 	userName: string,
-	id: number
+	id: string
+}
+
+export interface IState {
+	users: IUserData[],
+	user: IUserData
 }

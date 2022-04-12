@@ -21,7 +21,7 @@ type ModalFormProps = {
 	open: boolean
 	handleClose(): void
 	editUserData(data: IUserData): void
-	deleteItemInTable(id: number): void
+	deleteItemInTable(id: string): void
 }
 
 export const ModalEditItem: React.FC<ModalFormProps> = ({ item, open, handleClose, editUserData, deleteItemInTable }) => {
@@ -49,7 +49,7 @@ export const ModalEditItem: React.FC<ModalFormProps> = ({ item, open, handleClos
 	}
 
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog maxWidth={'xl'} open={open} onClose={handleClose}>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<DialogTitle>Add new user</DialogTitle>
 				<DialogContent>

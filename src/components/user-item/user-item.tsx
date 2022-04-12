@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ModalUser from '../modal-user';
 import ModalEditItem from '../modal-edit-item';
@@ -15,13 +15,15 @@ import { StyledTableCell, StyledTableRow } from '../../pages/users-list-page/sty
 import { FullName } from './style';
 
 type UserItemProps = {
-	item: IUserData
 	index: number
+	item: IUserData
 	changeDataTable(data: IUserData): void
-	deleteItemInTable(id: number): void
+	deleteItemInTable(id: string): void
 }
 
 export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable, deleteItemInTable }) => {
+
+	const navigate = useNavigate();
 
 	const [itemInfo, setItemInfo] = useState<IUserData>(item)
 
@@ -38,6 +40,8 @@ export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable
 		changeDataTable(data);
 	}
 
+	const goToUserDetails = () => navigate(`/users/${index + 1}`, { state: item })
+
 	return (
 		<>
 			<StyledTableRow>
@@ -49,7 +53,8 @@ export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable
 				<StyledTableCell align="center">{itemInfo.email}</StyledTableCell>
 				<StyledTableCell align="center">{itemInfo.userName}</StyledTableCell>
 				<StyledTableCell align="center">
-					<Button component={Link} to={`/items/${index + 1}`}>open</Button>
+					{/* <Button component={Link} to={`/items/${item.id}`}>open</Button> */}
+					<Button onClick={goToUserDetails}>open</Button>
 					<Button onClick={openInfoModal}><InfoIcon color='primary' /></Button>
 					<Button onClick={openEditModal}><EditIcon color='primary' /></Button>
 				</StyledTableCell>

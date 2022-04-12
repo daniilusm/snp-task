@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+
 import {
 	Button,
 	Typography,
@@ -20,18 +21,13 @@ import ModalForm from '../../components/modal-form';
 
 import { IUserData } from '../../interfaces';
 
-import usersSetNewItem from '../../store/actions';
 // import { selectUsers } from '../../store/selectors';
+
+import { deleteUser, editUserData, setNewUser } from '../../store/actions';
+import { GET_USERS } from '../../store/actions/types';
 
 import { StyledTableCell } from './styleMUI';
 import { Heading, Line } from './style';
-
-const noItems: IUserData = {
-	fullName: 'Exemple Name',
-	email: 'exemple@exemple.com',
-	userName: 'Exemple_User',
-	id: 1234567890
-}
 
 export const UserListPage: React.FC = () => {
 
@@ -50,13 +46,11 @@ export const UserListPage: React.FC = () => {
 		event.preventDefault();
 		const inputValue: string = event.target.value;
 		setValue(inputValue);
-		const searchParamsValue: string = `?search=${inputValue}`;
-		if (inputValue) {
-			setSearchParams(searchParamsValue);
-		}
-		if (!inputValue) {
-			setSearchParams('');
-		}
+		const val: string = (inputValue).toLocaleLowerCase();
+		const searchParamsValue: string = `?search=${val}`;
+		setSearchParams(val ? searchParamsValue : '');
+		let filteredUsers = tableItem.filter(item => item.fullName.toLocaleLowerCase().includes(val));
+		setTableItem(val ? filteredUsers : users);
 	}
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
@@ -68,47 +62,27 @@ export const UserListPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		const saved: IUserData[] = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[]
-		const setLSUser = dispatch(usersSetNewItem(saved));
-		setTableItem(saved)
+		const fetchUsers = dispatch({ type: GET_USERS });
+		// const saved: IUserData[] = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[];
+		// const setLSUser = dispatch(usersSetNewItem(saved));
 	}, [])
 
 	useEffect(() => {
-		localStorage.setItem('users', JSON.stringify(tableItem));
-		const setNewUser = dispatch(usersSetNewItem(tableItem));
-	}, [tableItem])
+		setTableItem(users);
+		// localStorage.setItem('users', JSON.stringify(tableItem));
+		// const setNewUser = dispatch(usersSetNewItem(tableItem));
+	}, [users])
 
-	function addNewUser(data: IUserData) {
-		setTableItem(prev => [data, ...prev])
+	const addNewUser = (data: IUserData) => {
+		dispatch(setNewUser(data));
 	}
 
-	function tableItemsContent() {
-		if (!tableItem) {
-			return <UserItem item={noItems} index={1} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
-		}
-		if (!value) {
-			return tableItem.map((item, index) => (
-				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
-			))
-		}
-		if (value) {
-			let filteredUsers = tableItem.filter(item => item.fullName.includes(value));
-			return filteredUsers.map((item, index) => (
-				<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
-			))
-		}
+	const changeItemInTable = (user: IUserData) => {
+		dispatch(editUserData(user));
 	}
 
-	function changeItemInTable(user: IUserData) {
-		let data: IUserData[] = tableItem;
-		const userIndex: number = data.findIndex(item => item.id === user.id);
-		data[userIndex] = user;
-		setTableItem(data);
-	}
-
-	function deleteItemInTable(id: number) {
-		const newDataTable: IUserData[] = tableItem.filter(item => item.id !== id);
-		setTableItem(newDataTable);
+	const deleteItemInTable = (id: string) => {
+		dispatch(deleteUser(id));
 	}
 
 	return (
@@ -140,7 +114,9 @@ export const UserListPage: React.FC = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{tableItemsContent()}
+							{tableItem.map((item, index) => (
+								<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+							))}
 						</TableBody>
 					</Table>
 				</TableContainer>

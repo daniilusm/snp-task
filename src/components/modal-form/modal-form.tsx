@@ -34,9 +34,8 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 		resolver: yupResolver(schema), mode: 'onChange'
 	});
 	const onSubmit: SubmitHandler<IUserData> = (data: IUserData) => {
-		data.id = Date.now();
+		data.id = Date.now().toString();
 		addNewUser(data);
-		console.log(data)
 		reset();
 	};
 

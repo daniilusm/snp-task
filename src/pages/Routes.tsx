@@ -9,7 +9,7 @@ export const Routers = () => {
 	return (
 		<Routes>
 			<Route path="/" element={<UserListPage />} />
-			<Route path="/items/:id" element={<UserPage />} />
+			<Route path="/users/:id" element={<UserPage />} />
 		</Routes>
 	);
 };

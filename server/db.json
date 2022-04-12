@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "fullName": "Leanne Graham",
+      "email": "Sincere@april.biz",
+      "userName": "Bret23",
+      "id": "1649587459476"
+    },
+    {
+      "fullName": "Ervin Howell",
+      "email": "Shanna@melissa.tv",
+      "userName": "Antonette",
+      "id": "1649425886257"
+    },
+    {
+      "fullName": "Clementine Bauch",
+      "email": "Nathan@yesenia.net",
+      "userName": "Samantha",
+      "id": "1649425886259"
+    },
+    {
+      "fullName": "Patricia Lebsack",
+      "email": "Julianne.OConner@kory.org",
+      "userName": "Karianne",
+      "id": "1649248072282"
+    },
+    {
+      "fullName": "Chelsey Dietrich",
+      "email": "Lucio_Hettinger@annie.ca",
+      "userName": "Kamren",
+      "id": "1649247632574"
+    },
+    {
+      "fullName": "Mrs. Dennis Schulist",
+      "email": "Karley_Dach@jasper.info",
+      "userName": "Leopoldo_Corkery",
+      "id": "1649243460606"
+    },
+    {
+      "fullName": "Kurtis Weissnat",
+      "email": "Telly.Hoeger@billy.biz",
+      "userName": "Elwyn.Skiles",
+      "id": "1649242966142"
+    },
+    {
+      "fullName": "Peter Parker",
+      "email": "spider-man@avengers.com",
+      "userName": "Amazing_spider",
+      "id": "1649788549551"
+    },
+    {
+      "fullName": "Tony Stark",
+      "email": "iron_man@gmail.com",
+      "userName": "Iron_3000",
+      "id": "1649788663062"
+    }
+  ]
+}

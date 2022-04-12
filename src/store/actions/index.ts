@@ -1,3 +1,13 @@
-import { usersSetNewItem } from './usersActions'
-
-export default usersSetNewItem;
+export {
+	getUsers,
+	setUsers,
+	getUsersById,
+	setUsersById,
+	deleteUser,
+	editUserData,
+	setNewUser,
+	loadData,
+	setNewItem,
+	deleteItem,
+	changeItem
+} from './usersActions';

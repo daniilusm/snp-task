@@ -42,18 +42,25 @@ export const UserListPage: React.FC = () => {
 	const searchValue: string | null = searchParams.get("search");
 
 	const [value, setValue] = useState<string>('');
-	const filterItems = (event: React.ChangeEvent<HTMLInputElement>) => {
-		event.preventDefault();
-		const inputValue: string = event.target.value;
-		setValue(inputValue);
-		const val: string = (inputValue).toLocaleLowerCase();
-		const searchParamsValue: string = `?search=${val}`;
-		setSearchParams(val ? searchParamsValue : '');
-		let filteredUsers = tableItem.filter(item => item.fullName.toLocaleLowerCase().includes(val));
-		setTableItem(val ? filteredUsers : users);
-	}
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
+
+	useEffect(() => {
+		const fetchUsers = dispatch({ type: GET_USERS });
+		// console.log(searchValue);
+		// const saved: IUserData[] = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[];
+		// const setLSUser = dispatch(usersSetNewItem(saved));
+	}, [])
+
+	useEffect(() => {
+		setTableItem(users);
+		if (searchValue) {
+			filterItems(searchValue);
+		}
+		// localStorage.setItem('users', JSON.stringify(tableItem));
+		// const setNewUser = dispatch(usersSetNewItem(tableItem));
+	}, [users])
+
 	const handleClickOpen = () => {
 		setOpenModal(true);
 	};
@@ -61,17 +68,20 @@ export const UserListPage: React.FC = () => {
 		setOpenModal(false);
 	};
 
-	useEffect(() => {
-		const fetchUsers = dispatch({ type: GET_USERS });
-		// const saved: IUserData[] = JSON.parse(localStorage.getItem('users') || '[]') as IUserData[];
-		// const setLSUser = dispatch(usersSetNewItem(saved));
-	}, [])
+	const enteredString = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		const inputValue: string = event.target.value;
+		setValue(inputValue);
+		const val: string = (inputValue).toLocaleLowerCase();
+		const searchParamsValue: string = `?search=${val}`;
+		setSearchParams(val ? searchParamsValue : '');
+		filterItems(val);
+	}
 
-	useEffect(() => {
-		setTableItem(users);
-		// localStorage.setItem('users', JSON.stringify(tableItem));
-		// const setNewUser = dispatch(usersSetNewItem(tableItem));
-	}, [users])
+	const filterItems = (val: string) => {
+		let filteredUsers = users.filter(item => item.fullName.toLocaleLowerCase().includes(val));
+		setTableItem(val ? filteredUsers : users);
+	}
 
 	const addNewUser = (data: IUserData) => {
 		dispatch(setNewUser(data));
@@ -97,7 +107,7 @@ export const UserListPage: React.FC = () => {
 					defaultValue={searchValue}
 					id="filter-item"
 					value={value}
-					onChange={filterItems}
+					onChange={enteredString}
 					label="Search user"
 					variant="standard"
 					margin='normal'

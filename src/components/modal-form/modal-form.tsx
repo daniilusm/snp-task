@@ -14,12 +14,17 @@ import {
 	DialogTitle,
 	TextField
 } from "@mui/material";
-import { ErrorMessage } from "./style";
+import { ErrorMessage, BoxItem } from "./style";
 
 type ModalFormProps = {
 	open: boolean
 	handleClose(): void
 	addNewUser(data: IUserData): void
+}
+
+const formStyle = {
+	height: '550px',
+	width: '400px'
 }
 
 export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewUser }) => {
@@ -41,43 +46,49 @@ export const ModalForm: React.FC<ModalFormProps> = ({ open, handleClose, addNewU
 
 	return (
 		<Dialog open={open} onClose={handleClose}>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
 				<DialogTitle>Add new user</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
 						To add a new user, please enter the data.
 					</DialogContentText>
-					<TextField
-						{...register("fullName")}
-						autoFocus
-						margin="dense"
-						id="fullName"
-						label="Full Name"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<ErrorMessage>{errors.fullName?.message}</ErrorMessage>
-					<TextField
-						{...register("email")}
-						margin="dense"
-						id="email"
-						label="Email Address"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<ErrorMessage>{errors.email?.message}</ErrorMessage>
-					<TextField
-						{...register("userName")}
-						margin="dense"
-						id="userName"
-						label="User Name"
-						type="text"
-						fullWidth
-						variant="standard"
-					/>
-					<ErrorMessage>{errors.userName?.message}</ErrorMessage>
+					<BoxItem>
+						<TextField
+							{...register("fullName")}
+							autoFocus
+							margin="dense"
+							id="fullName"
+							label="Full Name"
+							type="text"
+							fullWidth
+							variant="standard"
+						/>
+						<ErrorMessage>{errors.fullName?.message}</ErrorMessage>
+					</BoxItem>
+					<BoxItem>
+						<TextField
+							{...register("email")}
+							margin="dense"
+							id="email"
+							label="Email Address"
+							type="text"
+							fullWidth
+							variant="standard"
+						/>
+						<ErrorMessage>{errors.email?.message}</ErrorMessage>
+					</BoxItem>
+					<BoxItem>
+						<TextField
+							{...register("userName")}
+							margin="dense"
+							id="userName"
+							label="User Name"
+							type="text"
+							fullWidth
+							variant="standard"
+						/>
+						<ErrorMessage>{errors.userName?.message}</ErrorMessage>
+					</BoxItem>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

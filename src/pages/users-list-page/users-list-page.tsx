@@ -104,7 +104,6 @@ export const UserListPage: React.FC = () => {
 			<Line />
 			<Container>
 				<TextField
-					defaultValue={searchValue}
 					id="filter-item"
 					value={value}
 					onChange={enteredString}

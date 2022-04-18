@@ -124,8 +124,8 @@ export const UserListPage: React.FC = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{tableItem.map((item, index) => (
-								<UserItem item={item} key={item.id} index={index} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
+							{tableItem.map((item) => (
+								<UserItem item={item} key={item.id} changeDataTable={changeItemInTable} deleteItemInTable={deleteItemInTable}></UserItem>
 							))}
 						</TableBody>
 					</Table>

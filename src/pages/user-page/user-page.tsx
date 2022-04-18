@@ -21,11 +21,11 @@ export const UserPage: React.FC = () => {
 
 	const dispatch = useDispatch();
 
-	const location = useLocation();
+	// const location = useLocation();
 
-	const id: string = location.state.id;
+	// const id: string = location.state.id;
 
-	// const { id } = useParams();
+	const { id } = useParams();
 
 	const [userData, setUserData] = useState<IUserData>(noData);
 

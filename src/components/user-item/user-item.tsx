@@ -15,13 +15,12 @@ import { StyledTableCell, StyledTableRow } from '../../pages/users-list-page/sty
 import { FullName } from './style';
 
 type UserItemProps = {
-	index: number
 	item: IUserData
 	changeDataTable(data: IUserData): void
 	deleteItemInTable(id: string): void
 }
 
-export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable, deleteItemInTable }) => {
+export const UserItem: React.FC<UserItemProps> = ({ item, changeDataTable, deleteItemInTable }) => {
 
 	const navigate = useNavigate();
 
@@ -40,7 +39,7 @@ export const UserItem: React.FC<UserItemProps> = ({ item, index, changeDataTable
 		changeDataTable(data);
 	}
 
-	const goToUserDetails = () => navigate(`/users/${index + 1}`, { state: item })
+	const goToUserDetails = () => navigate(`/users/${item.id}`, { state: item })
 
 	return (
 		<>

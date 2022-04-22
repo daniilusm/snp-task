@@ -7,6 +7,7 @@ export {
 	editUserData,
 	setNewUser,
 	loadData,
+	loadUser,
 	setNewItem,
 	deleteItem,
 	changeItem

@@ -1,5 +1,5 @@
 export interface IUserData {
-	fullName: string
+	fullName: string,
 	email: string,
 	userName: string,
 	id: string

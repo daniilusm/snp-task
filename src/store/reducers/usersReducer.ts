@@ -1,5 +1,11 @@
 import { IState } from "../../interfaces";
-import { ADD_NEW_USER, SET_USERS, DELETE_USER, EDIT_USER, SET_USER_BY_ID } from "../actions/types";
+import {
+	ADD_NEW_USER,
+	SET_USERS,
+	DELETE_USER,
+	SET_USER_BY_ID,
+	SET_EDIT_USER
+} from "../actions/types";
 
 const initialState: IState = {
 	users: [],
@@ -18,10 +24,10 @@ export function users(state = initialState, action: any) {
 		case SET_USER_BY_ID:
 			return { ...state, user: action.payload };
 		case ADD_NEW_USER:
-			return { ...state, users: [...state.users, action.payload] };
-		case EDIT_USER:
-			const findItemIndex = state.users.findIndex(item => item.id === action.user.id)
-			return { ...state, users: state.users[findItemIndex] = action.user };
+			return { ...state, users: [...state.users, action.user] };
+		case SET_EDIT_USER:
+			const { user } = action;
+			return { ...state, users: state.users.map(item => item.id === user.id ? { ...item, user } : item) };
 		case DELETE_USER:
 			return { ...state, users: state.users.filter(item => item.id !== action.id) };
 

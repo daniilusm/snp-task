@@ -8,6 +8,8 @@ import {
 	GET_USERS,
 	GET_USER_BY_ID,
 	SET_USER_BY_ID,
+	SET_NEW_USER,
+	SET_EDIT_USER,
 } from "./types";
 
 export function getUsers() {
@@ -37,9 +39,16 @@ export function setUsersById(user: IUserData) {
 	};
 }
 
-export function setNewUser(user: IUserData) {
+export function addNewUser(user: IUserData) {
 	return {
 		type: ADD_NEW_USER,
+		user,
+	};
+}
+
+export function setNewUser(user: IUserData) {
+	return {
+		type: SET_NEW_USER,
 		user,
 	};
 }
@@ -51,7 +60,6 @@ export function deleteUser(id: string) {
 	};
 }
 
-
 export function editUserData(user: IUserData) {
 	return {
 		type: EDIT_USER,
@@ -59,10 +67,21 @@ export function editUserData(user: IUserData) {
 	};
 }
 
-export const loadData = async (id: string) => {
-	let url;
-	(id ? url = `http://localhost:3000/users/${id}` : url = 'http://localhost:3000/users');
-	const response = await fetch(url);
+export function setEditUserData(user: IUserData) {
+	return {
+		type: SET_EDIT_USER,
+		user,
+	};
+}
+
+export const loadData = async () => {
+	const response = await fetch(`http://localhost:3000/users`);
+	const result = response.json();
+	return result;
+}
+
+export const loadUser = async (id: string) => {
+	const response = await fetch(`http://localhost:3000/users/${id}`);
 	const result = response.json();
 	return result;
 }

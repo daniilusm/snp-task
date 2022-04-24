@@ -23,7 +23,7 @@ import { IUserData } from '../../interfaces';
 
 // import { selectUsers } from '../../store/selectors';
 
-import { deleteUser, editUserData, setNewUser } from '../../store/actions';
+import { deleteUserById, editUserData, setNewUser } from '../../store/actions';
 import { GET_USERS } from '../../store/actions/types';
 
 import { StyledTableCell } from './styleMUI';
@@ -41,7 +41,7 @@ export const UserListPage: React.FC = () => {
 
 	const searchValue: string | null = searchParams.get("search");
 
-	const [value, setValue] = useState<string>('');
+	const [value, setValue] = useState<string>(searchValue ? searchValue : '');
 
 	const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -92,7 +92,7 @@ export const UserListPage: React.FC = () => {
 	}
 
 	const deleteItemInTable = (id: string) => {
-		dispatch(deleteUser(id));
+		dispatch(deleteUserById(id));
 	}
 
 	return (

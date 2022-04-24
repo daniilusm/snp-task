@@ -1,23 +1,28 @@
 import { takeEvery, put, call, spawn } from 'redux-saga/effects';
 
 import {
-	DELETE_USER,
+	DELETE_USER_BY_ID,
 	EDIT_USER,
 	GET_USERS,
 	GET_USER_BY_ID,
 	SET_NEW_USER
 } from '../actions/types';
+
 import {
-	changeItem,
-	deleteItem,
 	deleteUser,
+	setUsers,
+	setUsersById,
+	addNewUser,
+	setEditUserData
+} from '../actions';
+
+import {
 	loadData,
 	loadUser,
 	setNewItem,
-	setUsers,
-	setUsersById
-} from '../actions';
-import { addNewUser, setEditUserData } from '../actions/usersActions';
+	changeItem,
+	deleteItem,
+} from '../../api';
 
 
 export function* getAllUsers() {
@@ -62,7 +67,7 @@ export function* changeUserSaga() {
 }
 
 export function* deleteUserSaga() {
-	yield takeEvery(DELETE_USER, deleteUserById);
+	yield takeEvery(DELETE_USER_BY_ID, deleteUserById);
 }
 
 export default function* rootSaga() {

@@ -11,3 +11,4 @@ export const EDIT_USER = 'EDIT_USER';
 export const SET_EDIT_USER = 'SET_EDIT_USER';
 
 export const DELETE_USER = 'DELETE_USER';
+export const DELETE_USER_BY_ID = 'DELETE_USER_BY_ID';

@@ -4,11 +4,9 @@ export {
 	getUsersById,
 	setUsersById,
 	deleteUser,
+	deleteUserById,
 	editUserData,
 	setNewUser,
-	loadData,
-	loadUser,
-	setNewItem,
-	deleteItem,
-	changeItem
+	addNewUser,
+	setEditUserData
 } from './usersActions';
